@@ -1,3 +1,8 @@
+<?php 
+    session_start();
+    include_once('model.php');
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -34,15 +39,16 @@
     <div class="container-fluid">
         <hr>
         <div class="mb-3">
-            <button type="button" class="btn btn-primary">All</button>
-            <button type="button" class="btn btn-primary">Catégorie 1</button>
-            <button type="button" class="btn btn-primary">Catégorie 2</button>
+            <?php $cats = getCats();
+                foreach($cats as $cat){?>
+            <button type="button" class="btn btn-primary cat-button" data-category="<?=$cat['id'];?>"><?=$cat['nom'];?></button>
+            <?php }?>
         </div>
         <hr>
         <div class="row">
             <div class="col-xl-8">
-                <div class="row row-cols-5 g-3">
-                    <div class="col">
+                <div class="row row-cols-5 g-3 item_cat">
+                    <!-- <div class="col">
                         <div class="card">
                             <img src="assets/img/poulet.jpeg" class="card-img-top" alt="...">
                             <div class="card-body text-center">
@@ -53,7 +59,7 @@
                     </div>
                     <div class="col">
                         <div class="card">
-                            <img src="assets/img/poulet.jpeg" class="card-img-top" alt="...">
+                            <img src="assets/img/attieke.jpeg" class="card-img-top" alt="...">
                             <div class="card-body text-center">
                               <h5 class="card-title">Attiéké Poisson</h5>
                               <p>Prix : <span class="prix">1000</span> F CFA</p>
@@ -149,7 +155,7 @@
                               <p>Prix : <span class="prix">100</span> F CFA</p>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="col-xl-4">
@@ -176,7 +182,7 @@
                         <p class="text-end"><strong>Total: <span id="total"></span> F CFA</strong></p>
                     </div>
                     <div class="col d-flex justify-content-center">
-                        <input type="button" class="btn btn-primary" onclick="imprimerFacture()" value="Imprimer">
+                        <input type="button" class="btn btn-primary" id="print" onclick="imprimerFacture()" value="Imprimer">
                     </div>
                 </div>
             </div>
@@ -217,11 +223,12 @@
             const modalElement = document.getElementById('quantityModal');
             const modal = new bootstrap.Modal(modalElement);
 
-            document.querySelectorAll('.card').forEach(function(card) {
-                card.addEventListener('click', function() {
-                    selectedCard = card; // Stocker la carte sélectionnée
+            // Utiliser la délégation d'événements pour les éléments ajoutés dynamiquement
+            document.body.addEventListener('click', function(event) {
+                if (event.target.closest('.card')) {
+                    selectedCard = event.target.closest('.card'); // Stocker la carte sélectionnée
                     modal.show(); // Afficher le modal
-                });
+                }
             });
 
             document.getElementById('confirmQuantity').addEventListener('click', function() {
@@ -270,6 +277,7 @@
             };
         });
     </script>
+
     <script>
         $(function(){
             $('#print').on('click', function(){
@@ -279,5 +287,33 @@
             });
         });
     </script>
+
+    <script>
+        $(document).ready(function() {
+            // Charger tous les articles au chargement de la page
+            loadItems(1);
+
+            // Gérer le clic sur les boutons de catégorie avec la classe spécifique
+            $('.cat-button').click(function() {
+                var categoryId = $(this).data('category'); // Utiliser l'attribut data-category
+                loadItems(categoryId);
+            });
+
+            // Fonction pour charger les articles en fonction de la catégorie
+            function loadItems(categoryId) {
+                $.ajax({
+                    url: 'view/getProduitByCatId.php',
+                    type: 'POST',
+                    data: { category_id: categoryId },
+                    success: function(response) {
+                        $('.item_cat').html(response);
+                    }
+                });
+            }
+        });
+    </script>
+
 </body>
 </html>
+
+<?php ob_end_flush(); ?>

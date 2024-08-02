@@ -23,5 +23,25 @@ function addRecord($table, $data) { // Fonctions pour ajouter un nouvel enregist
     $stmt->execute();
 }
 
+function getAll($table) { // Fonctions pour obtenir tous les enregistrements d'une table spécifique
+    $database = dbConnect();
+    $stmt = $database->query("SELECT * FROM {$table}");
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC); return $result;
+}
+
+function getById($table, $idColumn, $id) { // Fonctions pour obtenir un enregistrement par ID à partir d'une table spécifique
+    $database = dbConnect();
+    $stmt = $database->prepare("SELECT * FROM {$table} WHERE {$idColumn} = :id");
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute(); return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 // Fonctions pour ajouter des enregistrements à différentes tables
 function addCat($data) { addRecord('categories', $data); }
+
+// Fonctions pour lire des enregistrements dans différentes tables
+function getCats() { return getAll('categories'); }
+function getProduits() { return getAll('produits'); }
+
+// D'autres fonctions spécifiques pour obtenir des enregistrements par ID pour différentes tables
+function getProduitById($id) { return getById('produits', 'id', $id); }
