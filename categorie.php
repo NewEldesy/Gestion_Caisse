@@ -26,6 +26,10 @@
 
     <div class="container-fluid">
         <hr>
+        <div class="d-flex justify-content-end">
+            <input type="button" class="btn btn-primary" id="" onclick="" value="Nouvelle Catégorie">
+        </div>
+        <hr>
         <div class="row">
             <div class="col-xl-6">
                 <table class="table table-borderless table-secondary">
