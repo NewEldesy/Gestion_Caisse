@@ -40,9 +40,9 @@
         <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4">
             <ul class="nav col-12 col-md-12 mb-2 justify-content-center mb-md-0">
                 <li><a href="index" class="nav-link px-2 link-secondary">Acceuil</a></li>
-                <li><a href="page/categorie.php" class="nav-link px-2">Catégories</a></li>
-                <li><a href="page/produit.php" class="nav-link px-2">Produits</a></li>
-                <li><a href="page/transaction.php" class="nav-link px-2">Transactions</a></li>
+                <li><a href="categorie.php" class="nav-link px-2">Catégories</a></li>
+                <li><a href="produit.php" class="nav-link px-2">Produits</a></li>
+                <li><a href="transaction.php" class="nav-link px-2">Transactions</a></li>
             </ul>
         </header>
     </div>

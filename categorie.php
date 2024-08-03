@@ -1,6 +1,6 @@
 <?php 
     session_start();
-    include_once('/model.php');
+    include_once('model.php');
 ?>
 
 <!DOCTYPE html>
@@ -9,31 +9,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion Caisse</title>
-    <link href="/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/font-awesome/css/all.min.css" rel="stylesheet">
-    <style>
-        @media print {
-            .facture {
-                width: 80mm; /* Largeur de la facture en millimètres */
-                margin: 0 auto; /* Centrer la facture sur la page */
-                padding: 10mm; /* Ajouter du padding autour de la facture */
-            }
-            body * {
-                visibility: hidden;
-            }
-            .facture, .facture * {
-                visibility: visible;
-            }
-            .facture {
-                position: absolute;
-                left: 0;
-                top: 0;
-            }
-            .action-col {
-                display: none;
-            }
-        }
-    </style>
+    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/font-awesome/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -46,3 +23,43 @@
             </ul>
         </header>
     </div>
+
+    <div class="container-fluid">
+        <hr>
+        <div class="row">
+            <div class="col-xl-6">
+                <table class="table table-borderless table-secondary">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col" class="action-col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $cats = getCats();
+                            foreach($cats as $cat){
+                        ?>
+                            <tr>
+                                <td><?=$cat['id'];?></td>
+                                <td><?=$cat['nom'];?></td>
+                                <td>
+                                    <a href="" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                                    <a href="" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        <?php }?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Javascript -->
+    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/font-awesome/js/all.min.js"></script>
+    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/jQuery.print.js"></script>
+
+</body>
+</html>
