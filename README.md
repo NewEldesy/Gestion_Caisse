@@ -16,7 +16,7 @@ Ce projet est une application de gestion de caisse destinée à un restaurant. E
 
 ### Prérequis
 
-- Serveur web compatible avec PHP (ex. : XAMPP, WAMP).
+- Serveur web compatible avec PHP (ex. : XAMPP, WAMP, MAMP).
 - SQLite installé.
 - Navigateur web moderne (Chrome, Firefox, etc.).
 
