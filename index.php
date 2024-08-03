@@ -36,126 +36,30 @@
     </style>
 </head>
 <body>
+    <div class="container">
+        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4">
+            <ul class="nav col-12 col-md-12 mb-2 justify-content-center mb-md-0">
+                <li><a href="index" class="nav-link px-2 link-secondary">Acceuil</a></li>
+                <li><a href="page/categorie.php" class="nav-link px-2">Catégories</a></li>
+                <li><a href="page/produit.php" class="nav-link px-2">Produits</a></li>
+                <li><a href="page/transaction.php" class="nav-link px-2">Transactions</a></li>
+            </ul>
+        </header>
+    </div>
+
     <div class="container-fluid">
         <hr>
         <div class="mb-3">
             <?php $cats = getCats();
                 foreach($cats as $cat){?>
-            <button type="button" class="btn btn-primary cat-button" data-category="<?=$cat['id'];?>"><?=$cat['nom'];?></button>
+            <button type="button" class="btn btn-primary me-2 cat-button" data-category="<?=$cat['id'];?>"><?=$cat['nom'];?></button>
             <?php }?>
         </div>
         <hr>
         <div class="row">
             <div class="col-xl-8">
                 <div class="row row-cols-5 g-3 item_cat">
-                    <!-- <div class="col">
-                        <div class="card">
-                            <img src="assets/img/poulet.jpeg" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                              <h5 class="card-title">Poulet & alloco</h5>
-                              <p>Prix : <span class="prix">2000</span> F CFA</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <img src="assets/img/attieke.jpeg" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                              <h5 class="card-title">Attiéké Poisson</h5>
-                              <p>Prix : <span class="prix">1000</span> F CFA</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <img src="assets/img/exemple.png" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                              <h5 class="card-title">Article</h5>
-                              <p>Prix : <span class="prix">100</span> F CFA</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <img src="assets/img/exemple.png" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                              <h5 class="card-title">Article</h5>
-                              <p>Prix : <span class="prix">100</span> F CFA</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <img src="assets/img/exemple.png" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                              <h5 class="card-title">Article</h5>
-                              <p>Prix : <span class="prix">100</span> F CFA</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <img src="assets/img/exemple.png" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                              <h5 class="card-title">Article</h5>
-                              <p>Prix : <span class="prix">100</span> F CFA</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <img src="assets/img/exemple.png" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                              <h5 class="card-title">Article</h5>
-                              <p>Prix : <span class="prix">100</span> F CFA</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <img src="assets/img/exemple.png" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                              <h5 class="card-title">Article</h5>
-                              <p>Prix : <span class="prix">100</span> F CFA</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <img src="assets/img/exemple.png" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                              <h5 class="card-title">Article</h5>
-                              <p>Prix : <span class="prix">100</span> F CFA</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <img src="assets/img/exemple.png" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                              <h5 class="card-title">Article</h5>
-                              <p>Prix : <span class="prix">100</span> F CFA</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <img src="assets/img/exemple.png" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                              <h5 class="card-title">Article</h5>
-                              <p>Prix : <span class="prix">100</span> F CFA</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <img src="assets/img/exemple.png" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                              <h5 class="card-title">Article</h5>
-                              <p>Prix : <span class="prix">100</span> F CFA</p>
-                            </div>
-                        </div>
-                    </div> -->
+                    <!-- Product list -->
                 </div>
             </div>
             <div class="col-xl-4">
@@ -302,7 +206,7 @@
             // Fonction pour charger les articles en fonction de la catégorie
             function loadItems(categoryId) {
                 $.ajax({
-                    url: 'view/getProduitByCatId.php',
+                    url: 'view/getProduct.php',
                     type: 'POST',
                     data: { category_id: categoryId },
                     success: function(response) {
