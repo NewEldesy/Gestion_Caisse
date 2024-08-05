@@ -215,7 +215,7 @@
             deferred: $.Deferred(),
             timeout: 750,
             title: null,
-            doctype: '<!doctype html>'
+            doctype: '<!DOCTYPE html>'
         };
         // Merge with user-options
         options = $.extend({}, defaults, (options || {}));

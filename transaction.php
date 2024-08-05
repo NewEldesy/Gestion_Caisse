@@ -1,5 +1,5 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -79,7 +79,7 @@
 
             </div>
         </div>
-        
+
         <!-- Bootstrap core JavaScript -->
         <script src="assets/js/jquery-3.6.0.min.js"></script>
         <script src="script.js"></script>

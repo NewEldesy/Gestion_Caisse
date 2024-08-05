@@ -1,7 +1,6 @@
 <?php
 function dbConnect() {
     try {
-        // Connexion à la base de données SQLite
         $database = new PDO('sqlite:BDD/caisse.db');
         $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $database;
@@ -10,7 +9,7 @@ function dbConnect() {
     }
 }
 
-function handleDatabaseError($errorMessage) { // Gestion des erreurs de base de données
+function handleDatabaseError($errorMessage) {
     exit("Erreur de base de données : " . $errorMessage);
 }
 
@@ -23,10 +22,10 @@ function addRecord($table, $data) { // Fonctions pour ajouter un nouvel enregist
     $stmt->execute();
 }
 
-function getAll($table) { // Fonctions pour obtenir tous les enregistrements d'une table spécifique
+function getAll($table) {
     $database = dbConnect();
     $stmt = $database->query("SELECT * FROM {$table}");
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC); return $result;
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getById($table, $idColumn, $id) { // Fonctions pour obtenir un enregistrement par ID à partir d'une table spécifique

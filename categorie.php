@@ -1,5 +1,7 @@
-
-<!doctype html>
+<?php
+    include_once('model.php');
+?>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -64,9 +66,11 @@
                         <h3 class="h3">Categorie</h3>
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="btn-group mr-2">
-                                <a href="" id="addCat" class="btn btn-sm btn-outline-primary">
+                            <a href="#" id="addCat" data-bs-toggle="modal" data-bs-target="#exampleModalAdd" class="btn btn-sm btn-outline-primary">
                                 Nouvelle Categorie
-                                </a>
+                            </a>
+                                <!-- <a href="#" id="btn_update" data-toggle="modal" data-target="#exampleModalMaj" value="2" class="badge badge-warning badge-pill">
+                  Modifier</a> -->
                             </div>
                         </div>
                     </div>
@@ -107,16 +111,16 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="AddModal">Ajouter Categorie</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body" >
-                        <label for="nom">Nom Categorie</label>
-                        <input type="text" name="nom" id="nom">
+                    <div class="modal-body">
+                        <form id="frm_add_cat" class="needs-validation" novalidates>
+                            <label for="nom">Nom Categorie</label>
+                            <input type="text" class="form-control" id="nom" name="nom" required>
+                        </form>
+                        <div id="result_cat"></div> <!-- Ajouté pour afficher le résultat -->
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                         <button type="button" id="btn_add_cat" class="btn btn-primary">Ajouter</button>
                     </div>
                 </div>
@@ -125,7 +129,7 @@
 
         <!-- Bootstrap core JavaScript -->
         <script src="assets/js/jquery-3.6.0.min.js"></script>
-        <script src="script.js"></script>
+        <script src="assets/js/script.js"></script>
         <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
