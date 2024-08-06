@@ -1,4 +1,4 @@
-
+<?php include_once('model.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -64,13 +64,13 @@
                         <h3 class="h3">Produits</h3>
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="btn-group mr-2">
-                                <a href="" id="addProd" class="btn btn-sm btn-outline-primary">
-                                Nouveau Produit
+                                <a href="#" id="addProd" data-bs-toggle="modal" data-bs-target="#exampleModalAdd" class="btn btn-sm btn-outline-primary">
+                                    Nouveau Produit
                                 </a>
                             </div>
                         </div>
                     </div>
-
+                    <div id="result_prod"></div>
                     <div id="msg_delete_prod"></div>
                     <div id="msg_maj_prod"></div>
 
@@ -86,9 +86,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="UpdateModal">Modifier Utilisateur</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" >
                         <div id="aff_form_mod"></div>
@@ -105,21 +103,29 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="AddModal">Modifier Utilisateur</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <h5 class="modal-title" id="AddModal">Ajout Produit</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" >
-                        <label for="">nom</label>
-                        <input type="text" name="" id="">
-                        <label for="">prix</label>
-                        <input type="text" name="" id="">
-                        <label for="">image produit</label>
-                        <input type="file" name="" id="">
+                        <form  id="frm_add_prod" class="needs-validation" novalidates enctype="multipart/form-data">
+                            <label for="nom">Nom</label>
+                            <input class="form-control" type="text" name="nom" id="nom" required>
+                            <label for="prix">Prix</label>
+                            <input class="form-control" type="text" name="prix" id="prix" required>
+                            <label for="categorie_id" class="form-label">Sélectionnez une categorie</label>
+                                    <select class="form-select" name="categorie_id" id="categorie_id" aria-label="Floating label select example">
+                                        <?php $cats = getCats();
+                                            foreach($cats as $cat) {
+                                        ?>
+                                        <option value="<?=$cat['id'];?>"><?=$cat['nom'];?></option>
+                                        <?php } ?>
+                                    </select>
+                            <label for="img">Image</label>
+                            <input class="form-control" type="file" name="img" id="img" accept=".png, .jpg, .jpeg" required>
+                        </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btn_add_prod" class="btn btn-primary">Ajout</button>
+                        <button type="button" id="btn_add_prod" class="btn btn-primary">Ajouter</button>
                     </div>
                 </div>
             </div>
@@ -127,7 +133,7 @@
 
         <!-- Bootstrap core JavaScript -->
         <script src="assets/js/jquery-3.6.0.min.js"></script>
-        <script src="script.js"></script>
+        <script src="assets/js/script.js"></script>
         <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

@@ -22,12 +22,8 @@ $cats = getCats();
                <td><?= $cat['id']; ?></td>
                <td><?= $cat['nom']; ?></td>
                <td>
-                    <a href="#" id="btn_del_cat" value="<?= $cat['id']; ?>" class="btn btn-sm btn-danger">
-                        <i class="fas fa-trash"></i>Supprimer
-                    </a>
-                    <a href="#" id="btn_up_cat" data-bs-toggle="modal" data-bs-target="#exampleModalMaj" value="<?= $cat['id']; ?>" class="btn btn-sm btn-warning">
-                        <i class="fas fa-edit"></i>Modifier
-                    </a>
+                  <a href="#" class="btn_del_cat btn btn-sm btn-danger" data-id="<?=$cat['id'];?>">Supprimer</a>
+                  <a href="#" id="btn_up_cat" data-bs-toggle="modal" data-bs-target="#exampleModalMaj" value="<?= $cat['id']; ?>" class="btn btn-sm btn-warning"></i>Modifier</a>
                </td>
             </tr>
             <?php } 

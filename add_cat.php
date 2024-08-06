@@ -6,8 +6,7 @@
     if(isset($_POST['nom']) && !empty($_POST['nom'])) {
         $data = ['nom' => $_POST['nom']];
         $cat = addCat($data);
-        
-        if($cat){
+        if(!$cat){
             echo '<div class="alert alert-success" role="alert">Catégorie ajoutée avec succès.</div>';
         } else {
             echo '<div class="alert alert-danger" role="alert">Échec de l\'ajout de la catégorie.</div>';
