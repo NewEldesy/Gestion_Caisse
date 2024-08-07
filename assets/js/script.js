@@ -365,3 +365,73 @@ function majProds() {
     });
 }
 majProds();
+
+// Enregistrement de la transaction
+$(document).ready(function() {
+    $('#print').on('click', function() {
+        saveData();
+    });
+});
+
+function saveData() {
+    // Récupérer les informations de la facture
+    var date = $('#date').text();
+    var transaction_id = $('#transaction_id').text();
+    var total = $('#total').text();
+    var items = [];
+    var statuts = 'payé'; // Notez que j'ai corrigé "statuts" en "statuts" pour être cohérent avec le code PHP
+
+    $('#recu tr').each(function() {
+        var item = {
+            id: $(this).find('td:eq(0)').text(), // ID du produit dans la première colonne
+            qty: $(this).find('td:eq(1)').text(), // Quantité dans la deuxième colonne
+            pu: $(this).find('td:eq(2)').text(), // Prix unitaire dans la troisième colonne
+            total: $(this).find('td:eq(3)').text() // Total dans la quatrième colonne
+        };
+        items.push(item);
+    });
+    
+    $.ajax({
+        url: 'save_transaction.php',
+        method: 'POST',
+        data: {
+            date: date,
+            transaction_id: transaction_id,
+            total: total,
+            statuts: statuts, // Assurez-vous que le nom correspond à celui utilisé dans le code PHP
+            items: JSON.stringify(items) // Convertir le tableau en JSON
+        },
+        success: function(response) {
+            print();
+            lastId();
+        },
+        error: function(xhr, status, error) {
+            console.error('Erreur AJAX:', error);
+            alert('Erreur lors de l\'enregistrement de la facture.');
+        }
+    });
+}
+
+//Get Receipt Number
+function lastId() {
+    $(document).ready(function() {
+        $.ajax({
+            url: 'getLastTransactionId.php', // URL du script PHP
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    $('#transaction_id').text(response.last_id);
+                    $('#date').text(new Date().toLocaleString());
+                } else {
+                    $('#error').text('Erreur: ' + response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX error:", status, error); // Affiche les erreurs AJAX dans la console
+                $('#error').text('Erreur AJAX: ' + error);
+            }
+        });
+    });
+}
+lastId();

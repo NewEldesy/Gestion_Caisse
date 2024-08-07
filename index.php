@@ -9,7 +9,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <!-- title page -->
-        <title>GC || Caisse</title>
+        <title>E.R || Caisse</title>
         <!-- CSS -->
         <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link href="assets/font-awesome/css/all.min.css" rel="stylesheet">
@@ -41,7 +41,7 @@
 
     <body>
         <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-2">
-            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Gestion Caisse</a>
+            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Espace Regal</a>
             <ul class="navbar-nav px-3">
                 <li class="nav-item text-nowrap">
                 <a class="nav-link" href="#">Deconnection</a>
@@ -97,6 +97,7 @@
                             <?php }?>
                         </div>
                         <hr>
+                            <div id="msg_print"></div>
                             <div class="row">
                                 <div class="col-xl-8">
                                     <div class="row row-cols-5 g-3 item_cat">
@@ -105,10 +106,11 @@
                                 </div>
                                 <div class="col-xl-4">
                                     <div class="col border border border-secondary border rounded p-4">
+                                        <div id="error"></div>
                                         <div class="facture" id="facture">
                                             <h1>Restaurant</h1>
-                                            <p>01 Août 2024</p>
-                                            <p>Reçu n° : 1</p>
+                                            <p><span id="date"></span></p>
+                                            <p>Reçu n° : <span id="transaction_id"></span></p>
                                             
                                             <table class="table table-borderless table-secondary">
                                                 <thead>
@@ -127,7 +129,7 @@
                                             <p class="text-end"><strong>Total: <span id="total"></span> F CFA</strong></p>
                                         </div>
                                         <div class="col d-flex justify-content-center">
-                                            <input type="button" class="btn btn-primary" id="print" onclick="imprimerFacture()" value="Imprimer">
+                                            <input type="button" class="btn btn-primary" id="print" value="Imprimer">
                                         </div>
                                     </div>
                                 </div>

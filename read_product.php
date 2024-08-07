@@ -7,7 +7,7 @@ $prods = getProducts();
 <div class="col-md-12 order-md-1">
    <h5 class="mb-5">Liste des prodegories</h5>
    <div class="table-responsive">
-      <table class="table table-striped table-sm">
+      <table id="productTable" class="table table-striped table-sm">
          <thead>
             <tr>
                <th>#</th>

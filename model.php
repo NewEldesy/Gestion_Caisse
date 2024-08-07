@@ -81,3 +81,34 @@ function getProdByCatId(){
     $query->bindParam(':category_id', $_POST['category_id'], PDO::PARAM_INT);
     $query->execute(); return $query->fetchAll(PDO::FETCH_ASSOC);
 }
+
+// Last Transaction Id
+function lastId() {
+    $database = dbConnect();
+    $querylastId =  ("SELECT MAX(id) AS last_id FROM transactions");
+    $stmt= $database->prepare($querylastId); $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC); return $row['last_id'];
+}
+
+function getTotalTransactions($startDate, $endDate) {
+    $database = dbConnect();
+    $query = "SELECT SUM(total) AS total FROM transactions WHERE statuts = 'payé' AND date BETWEEN :startDate AND :endDate";
+    $stmt = $database->prepare($query);
+    $stmt->bindParam(':startDate', $startDate);
+    $stmt->bindParam(':endDate', $endDate);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['total'] ? $result['total'] : 0;
+}
+
+function getTransactionTotals() {
+    $today = date('Y-m-d'); $startOfWeek = date('Y-m-d', strtotime('monday this week'));
+    $startOfMonth = date('Y-m-01'); $startOfYear = date('Y-01-01');
+
+    $totals = [
+        'today' => getTotalTransactions($today, $today), 'week' => getTotalTransactions($startOfWeek, $today),
+        'month' => getTotalTransactions($startOfMonth, $today), 'year' => getTotalTransactions($startOfYear, $today),
+        'total' => getTotalTransactions('1970-01-01', $today), // Start date from the epoch
+    ];
+    return $totals;
+}
