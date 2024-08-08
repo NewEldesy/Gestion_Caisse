@@ -5,7 +5,7 @@
 
     // Requête pour récupérer les articles en fonction de la catégorie sélectionnée
     if ($categoryId == 1) {
-        $prods = getAllProd();
+        $prods = getProducts();
     } else {
         $prods = getProdByCatId();
     }

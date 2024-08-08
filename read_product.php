@@ -5,7 +5,7 @@ $prods = getProducts();
 ?>
 
 <div class="col-md-12 order-md-1">
-   <h5 class="mb-5">Liste des prodegories</h5>
+   <h5 class="mb-5">Liste des Produits</h5>
    <div class="table-responsive">
       <table id="productTable" class="table table-striped table-sm">
          <thead>
@@ -44,3 +44,5 @@ $prods = getProducts();
       </table>
    </div>
 </div>
+
+<script> new DataTable('#productTable'); </script>

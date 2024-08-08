@@ -61,13 +61,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //Imprimer reçu
 function print() {
-    $(function(){
-        $('#print').on('click', function(){
-            $('.action-col').hide(); // colonne "Action" invisible avant impression
-            $.print(".facture"); // Imprimer la facture
-            $('.action-col').show(); // colonne "Action" visible après impression
-        });
-    });
+    $('.action-col').hide(); // colonne "Action" invisible avant impression
+    $.print(".facture"); // Imprimer la facture
+    $('.action-col').show(); // colonne "Action" visible après impression
 }
 
 //Reset Reçu
@@ -99,6 +95,11 @@ $(document).ready(function() {
         });
     }
 });
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////// START CATEGORIE ////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Afficher Categorie
 function affCats(){
@@ -220,6 +221,15 @@ function majCats() {
 }
 majCats();
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////// END CATEGORIE /////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////// START PRODUIT /////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //Afficher Produits
 function affProds(){
     $.ajax({
@@ -229,8 +239,8 @@ function affProds(){
             $("#affProd").html(data).delay(500).slideDown(500);
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.error('Erreur lors de la récupération des catégories :', textStatus, errorThrown);
-            $("#affProd").html('<div class="alert alert-danger">Erreur lors du chargement des catégories.</div>');
+            console.error('Erreur lors de la récupération des produits :', textStatus, errorThrown);
+            $("#affProd").html('<div class="alert alert-danger">Erreur lors du chargement des produits.</div>');
         }
     });
 }
@@ -366,51 +376,82 @@ function majProds() {
 }
 majProds();
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////// END PRODUIT //////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function clearTableBody() {
+    document.getElementById('recu').innerHTML = '';
+    document.getElementById('total').innerHTML = '';
+}
+
+
 // Enregistrement de la transaction
 $(document).ready(function() {
     $('#print').on('click', function() {
-        saveData();
-    });
-});
+        // Montrer l'indicateur de chargement
+        $('#loading').show();
+        $('#print').prop('disabled', true);
 
-function saveData() {
-    // Récupérer les informations de la facture
-    var date = $('#date').text();
-    var transaction_id = $('#transaction_id').text();
-    var total = $('#total').text();
-    var items = [];
-    var statuts = 'payé'; // Notez que j'ai corrigé "statuts" en "statuts" pour être cohérent avec le code PHP
+        // Récupérer les informations de la facture
+        var date = $('#date').text();
+        var transaction_id = $('#transaction_id').text();
+        var total = $('#total').text();
+        var items = [];
+        var statuts = 'payé';
 
-    $('#recu tr').each(function() {
-        var item = {
-            id: $(this).find('td:eq(0)').text(), // ID du produit dans la première colonne
-            qty: $(this).find('td:eq(1)').text(), // Quantité dans la deuxième colonne
-            pu: $(this).find('td:eq(2)').text(), // Prix unitaire dans la troisième colonne
-            total: $(this).find('td:eq(3)').text() // Total dans la quatrième colonne
-        };
-        items.push(item);
-    });
-    
-    $.ajax({
-        url: 'save_transaction.php',
-        method: 'POST',
-        data: {
-            date: date,
-            transaction_id: transaction_id,
-            total: total,
-            statuts: statuts, // Assurez-vous que le nom correspond à celui utilisé dans le code PHP
-            items: JSON.stringify(items) // Convertir le tableau en JSON
-        },
-        success: function(response) {
-            print();
-            lastId();
-        },
-        error: function(xhr, status, error) {
-            console.error('Erreur AJAX:', error);
-            alert('Erreur lors de l\'enregistrement de la facture.');
+        $('#recu tr').each(function() {
+            var item = {
+                id: $(this).find('td:eq(0)').text(),
+                qty: $(this).find('td:eq(1)').text(),
+                pu: $(this).find('td:eq(2)').text(),
+                total: $(this).find('td:eq(3)').text()
+            };
+            items.push(item);
+        });
+
+        // Vérifier s'il y a des articles ou un total à 0
+        if ($.trim(total) === '' && items.length === 0) {
+            alert('Aucune vente en cours');
+            $('#loading').hide(); // Cacher l'indicateur si aucune vente
+            $('#print').prop('disabled', false); // Réactiver le bouton
+            return; // Arrêter l'exécution si aucune vente
+        } else {
+            // Envoyer la requête AJAX pour enregistrer la transaction
+            $.ajax({
+                url: 'save_transaction.php',
+                method: 'POST',
+                data: {
+                    date: date,
+                    transaction_id: transaction_id,
+                    total: total,
+                    statuts: statuts,
+                    items: JSON.stringify(items)
+                },
+                success: function(response) {
+                    $("#msg_print").html(response).delay(700).slideDown(700);
+                    $("#msg_print").delay(2000).slideUp(700);
+                
+                    // Utiliser un timeout pour donner un peu de temps à la mise à jour du DOM avant d'imprimer
+                    setTimeout(function() {
+                        print();
+                        lastId();
+                        clearTableBody();
+                    }, 100); // 100 millisecondes d'attente
+                },
+                error: function(xhr, status, error) {
+                    console.error('Erreur AJAX:', error);
+                    alert('Erreur lors de l\'enregistrement de la facture.');
+                },
+                complete: function() {
+                    // Cacher l'indicateur de chargement et réactiver le bouton après la requête
+                    $('#loading').hide();
+                    $('#print').prop('disabled', false);
+                }
+            });
         }
     });
-}
+});
 
 //Get Receipt Number
 function lastId() {
@@ -435,3 +476,100 @@ function lastId() {
     });
 }
 lastId();
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////// START TRANSACTION ///////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Afficher Transactions
+function affTs(){
+    $.ajax({
+        url: "read_transaction.php",
+        type: "post",
+        success: function(data) {
+            $("#affTransactions").html(data).delay(500).slideDown(500);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Erreur lors de la récupération des transactions :', textStatus, errorThrown);
+            $("#affTransactions").html('<div class="alert alert-danger">Erreur lors du chargement des transactions.</div>');
+        }
+    });
+}
+affTs();
+
+function updateTs() {
+    $(document).on("click", "#btn_up_t", function(e) {
+        e.preventDefault();
+        var id = $(this).data("id"); // Use data attribute
+
+        if (!id) {
+            console.error("ID is not defined.");
+            return;
+        }
+
+        $.ajax({
+            url: "mod_transaction.php",
+            type: "post",
+            data: { id: id },
+            success: function(data) {
+                $("#aff_form_t").html(data);
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX error: " + status + " - " + error);
+                // Optionally, handle the error by displaying a message to the user
+            }
+        });
+    });
+}
+updateTs();
+
+//fonction de mise a jour categorie
+function majTs() {
+    $(document).on("click" , "#btn_maj_t", function(e) {
+        e.preventDefault();
+
+        var id = $("#id").val();
+        var statuts = $("#statuts").val();
+        var btn_maj_t = $("#btn_maj_t").val();
+
+        $.ajax({
+            url:"update_transaction.php",
+            type:"post",
+            data:{
+                id:id,
+                statuts:statuts,
+                btn_maj_t:btn_maj_t
+            },
+            success:function(data){
+                $("#msg_maj_t").html(data).delay(700).slideDown(700);
+                $("#msg_maj_t").delay(700).slideUp(700);
+                affTs();
+                updateTransactionTotals(); 
+            }
+        });
+    });
+}
+majTs();
+
+function updateTransactionTotals() {
+    $.ajax({
+        url: 'get_totals.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            $('#t_total').text(Number(data.total).toFixed(2));
+            $('#t_today').text(Number(data.today).toFixed(2));
+            $('#t_week').text(Number(data.week).toFixed(2));
+            $('#t_month').text(Number(data.month).toFixed(2));
+            $('#t_year').text(Number(data.year).toFixed(2));
+        },
+        error: function(xhr, status, error) {
+            console.error('Erreur Ajax:', status, error);
+        }
+    });
+}
+updateTransactionTotals();
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////// END TRANSACTION ////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

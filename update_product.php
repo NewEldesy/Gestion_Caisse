@@ -42,4 +42,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo '<div class="alert alert-danger" role="alert">Échec de la mise à jour du produit</div>';
     }
 }
-?>

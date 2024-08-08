@@ -29,7 +29,7 @@ if (!empty($mod)) {
                 <!-- Affichage de l'image actuelle -->
                 <img src="assets/img/<?=$mod['img']?>" alt="" class="img-thumbnail" width="50" height="50">
             </div>
-            <input type="file" accept=".png, .jpg, .jpeg" id="img" class="form-control" required>
+            <input type="file" accept=".png, .jpg, .jpeg" id="img" class="form-control">
         </div>
     </div>
 </form>

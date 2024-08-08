@@ -40,3 +40,5 @@ $cats = getCats();
       </table>
    </div>
 </div>
+
+<script> new DataTable('#catTable'); </script>

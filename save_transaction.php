@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Assurez-vous que $data est bien formaté
     if (isset($data['transaction_id']) && isset($data['date']) && isset($data['total']) && isset($data['items']) && isset($data['statuts'])) {
         $transactionId = addTransaction($data);
-        echo "Transaction ajoutée avec succès";
+        echo "Transaction effectuée";
     } else {
         echo "Données manquantes.";
     }
@@ -16,7 +16,7 @@ function addTransaction($data) {
     $database = dbConnect();
     
     $transactionId = $data['transaction_id'];
-    $date = $data['date'];
+    $date = date('Y-m-d');
     $total = $data['total'];
     $statuts = $data['statuts']; // Récupérer le statut
     $items = json_decode($data['items'], true); // Décoder le JSON des éléments
