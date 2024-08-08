@@ -52,7 +52,7 @@
                             <label for="nom">Nom</label>
                             <input class="form-control" type="text" name="nom" id="nom" required>
                             <label for="prix">Prix</label>
-                            <input class="form-control" type="text" name="prix" id="prix" required>
+                            <input class="form-control" type="number" name="prix" id="prix" required>
                             <label for="categorie_id" class="form-label">Sélectionnez une categorie</label>
                                     <select class="form-select" name="categorie_id" id="categorie_id" aria-label="Floating label select example">
                                         <?php $cats = getCats();

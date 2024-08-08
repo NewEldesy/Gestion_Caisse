@@ -1,8 +1,6 @@
 <?php
     include_once('model.php');
 
-    include_once('model.php');
-
     if(isset($_POST['nom']) && !empty($_POST['nom'])) {
         $data = ['nom' => $_POST['nom']];
         $cat = addCat($data);

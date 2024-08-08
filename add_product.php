@@ -15,8 +15,13 @@
                     $data['prix'] = $_POST['prix'];
                     $data['categorie_id'] = $_POST['categorie_id'];
                     $data['img'] = $_FILES['img']['name'];
-    
-                    addProd($data);
+                    
+                    if(!empty($data['nom']) && !empty($data['prix']) && !empty($data['categorie_id']) && !empty($data['img'])){
+                        addProd($data);
+                    } else
+                    {
+                        echo '<div class="alert alert-danger" role="alert">Veuillez remplir tout les champs</div>';
+                    }
     
                     echo '<div class="alert alert-success" role="alert">Produit ajouté avec succès</div>';
                 } else {

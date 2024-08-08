@@ -130,14 +130,13 @@ $(document).on('click', '#btn_add_cat', function(e){
             data: {nom: nom},
             success: function(data){
                 $("#result_cat").html(data).delay(700).slideDown(700);
-                affCats(); // Appel de la fonction pour mettre à jour les catégories
+                affCats();
                 $("#result_cat").delay(2000).slideUp(700);
             },
             error: function(){
                 $("#result_cat").html('<div class="alert alert-danger">Erreur lors de l\'ajout de la catégorie.</div>');
             }
         });
-        $("#frm_add_cat")[0].reset(); // Réinitialise le formulaire
         $('#exampleModalAdd').modal('hide'); // Ferme la modal après l'ajout
     } else {
         $("#result_cat").html('<div class="alert alert-warning">Le nom de la catégorie ne peut pas être vide.</div>');
@@ -156,8 +155,8 @@ $(document).on('click', '.btn_del_cat', function(e){
             data: { id: id },
             success: function(data) {
                 $("#msg_delete_cat").html(data).delay(700).slideDown(700);
+                affCats();
                 $("#msg_delete_cat").delay(2000).slideUp(700);
-                affCats(); // Recharge la liste des catégories après suppression
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error('Erreur lors de la suppression :', textStatus, errorThrown);
@@ -168,15 +167,12 @@ $(document).on('click', '.btn_del_cat', function(e){
         return false;
     }
 });
-
 //Fonction qui modifier categorie
 function updateCats()
 {
     $(document).on("click" , "#btn_up_cat" , function(e)
     {
-        e.preventDefault();
-        var id = $(this).attr("value");
-        
+        e.preventDefault(); var id = $(this).attr("value");
         $.ajax({
             url:"mod_cat.php",
             type:"post",
@@ -190,37 +186,28 @@ function updateCats()
     });
 }
 updateCats();
-
 //fonction de mise a jour categorie
 function majCats() {
     $(document).on("click" , "#btn_maj_cat", function(e) {
         e.preventDefault();
-
-        var id = $("#id").val();
-        var nom = $("#nom").val();
+        var id = $("#id").val(); var nom = $("#nom").val();
         var btn_maj_cat = $("#btn_maj_cat").val();
-
-        console.log("ID:", id);
-        console.log("Nom:", nom);
-
         $.ajax({
             url:"update_cat.php",
             type:"post",
             data:{
-                id:id,
-                nom:nom,
+                id:id, nom:nom,
                 btn_maj_cat:btn_maj_cat
             },
             success:function(data){
                 $("#msg_maj_cat").html(data).delay(700).slideDown(700);
-                $("#msg_maj_cat").delay(700).slideUp(700);
-                affCats();  
+                affCats();
+                $("#msg_maj_cat").delay(700).slideUp(700);  
             }
         });
     });
 }
 majCats();
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////// END CATEGORIE /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,7 +216,6 @@ majCats();
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////// START PRODUIT /////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //Afficher Produits
 function affProds(){
     $.ajax({
@@ -249,19 +235,16 @@ affProds();
 // Ajouter Produits
 $(document).on('click', '#btn_add_prod', function(e) {
     e.preventDefault();
-
-    var nom = $("#nom").val();
-    var prix = $("#prix").val();
+    var nom = $("#nom").val(); var prix = $("#prix").val();
     var categorie_id = $("#categorie_id").val();
-    var img = $("#img")[0].files[0]; // Récupère le fichier sélectionné
-
-    if (nom.trim() !== "" && prix.trim() !== "" && img) { // Vérifier si les champs ne sont pas vides
+    var img = $("#img")[0].files[0];
+    // Vérifier si les champs ne sont pas vides
+    if (nom.trim() !== "" && prix.trim() !== "" && img) {
         var formData = new FormData();
         formData.append('nom', nom);
         formData.append('prix', prix);
         formData.append('categorie_id', categorie_id);
         formData.append('img', img);
-
         $.ajax({
             url: "add_product.php",
             type: "post",
@@ -270,26 +253,23 @@ $(document).on('click', '#btn_add_prod', function(e) {
             processData: false,
             success: function(data) {
                 $("#result_prod").html(data).delay(700).slideDown(700);
-                affProds(); // Appel de la fonction pour mettre à jour la liste des produits
+                affProds();
                 $("#result_prod").delay(2000).slideUp(700);
             },
             error: function() {
                 $("#result_prod").html('<div class="alert alert-danger">Erreur lors de l\'ajout du produit.</div>');
             }
         });
-        $("#frm_add_prod")[0].reset(); // Réinitialise le formulaire
         $('#exampleModalAdd').modal('hide'); // Ferme la modal après l'ajout
     } else {
         $("#result_prod").html('<div class="alert alert-warning">Veuillez remplir tous les champs.</div>');
     }
 });
-
 //Supprimer Produits
 $(document).on('click', '.btn_del_prod', function(e){
     e.preventDefault();
     if (window.confirm("Voulez-vous supprimer ce produit ?")) {
         var id = $(this).data("id");
-
         $.ajax({
             url: "delete_product.php",
             type: "post",
@@ -304,11 +284,8 @@ $(document).on('click', '.btn_del_prod', function(e){
                 $("#msg_delete_prod").html('<div class="alert alert-danger">Erreur lors de la suppression du produit.</div>').delay(2000).slideUp(700);
             }
         });
-    } else {
-        return false;
-    }
+    } else { return false; }
 });
-
 //Fonction qui modifier produit
 function updateProds()
 {
@@ -316,13 +293,10 @@ function updateProds()
     {
         e.preventDefault();
         var id = $(this).attr("value");
-        
         $.ajax({
             url:"mod_prod.php",
             type:"post",
-            data:{
-                id:id
-            },
+            data:{ id:id },
             success: function(data){
                 $("#aff_form_mod").html(data);
             }
@@ -330,130 +304,96 @@ function updateProds()
     });
 }
 updateProds();
-
+// function MAJ Produit
 function majProds() {
     $(document).on('click', '#btn_maj_prod', function(e) {
         e.preventDefault();
-    
-        var id = $("#id").val(); // Ajoutez un champ caché pour l'identifiant du produit
-        var nom = $("#nom").val();
-        var prix = $("#prix").val();
-        var categorie_id = $("#categorie_id").val();
+        var id = $("#id").val(); var nom = $("#nom").val();
+        var prix = $("#prix").val(); var categorie_id = $("#categorie_id").val();
         var img = $("#img")[0].files[0]; // Récupère le fichier sélectionné
-    
-        if (nom.trim() !== "" && prix.trim() !== "" && (img || !img)) { // Vérifie les champs
+        // Vérifie les champs
+        if (nom.trim() !== "" && prix.trim() !== "" && (img || !img)) {
             var formData = new FormData();
-            formData.append('id', id); // Ajoutez l'identifiant du produit
-            formData.append('nom', nom);
-            formData.append('prix', prix);
-            formData.append('categorie_id', categorie_id);
-            if (img) {
-                formData.append('img', img);
-            } else {
-                formData.append('current_img', $("#current_img").val()); // Assurez-vous d'ajouter un champ caché pour l'image actuelle
-            }
-    
+            formData.append('id', id); formData.append('nom', nom);
+            formData.append('prix', prix); formData.append('categorie_id', categorie_id);
+            if (img) { formData.append('img', img);
+            } else { formData.append('current_img', $("#current_img").val());}
             $.ajax({
                 url: "update_product.php",
                 type: "post",
                 data: formData,
-                contentType: false,
-                processData: false,
+                contentType: false, processData: false,
                 success: function(data) {
                     $("#msg_maj_prod").html(data).delay(700).slideDown(700);
-                    $("#msg_maj_prod").delay(2000).slideUp(700);
                     affProds();
+                    $("#msg_maj_prod").delay(2000).slideUp(700);
                 },
-                error: function() {
-                    $("#msg_maj_prod").html('<div class="alert alert-danger">Erreur lors de la mise à jour du produit.</div>');
-                }
+                error: function() { $("#msg_maj_prod").html('<div class="alert alert-danger">Erreur lors de la mise à jour du produit.</div>'); }
             });
             $('#exampleModalMaj').modal('hide');
-        } else {
-            $("#msg_maj_prod").html('<div class="alert alert-warning">Veuillez remplir tous les champs.</div>');
-        }
+        } else { $("#msg_maj_prod").html('<div class="alert alert-warning">Veuillez remplir tous les champs.</div>'); }
     });
 }
 majProds();
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////// END PRODUIT //////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 function clearTableBody() {
-    document.getElementById('recu').innerHTML = '';
-    document.getElementById('total').innerHTML = '';
+    document.getElementById('recu').innerHTML = ''; document.getElementById('total').innerHTML = '';
 }
-
-
 // Enregistrement de la transaction
 $(document).ready(function() {
     $('#print').on('click', function() {
         // Montrer l'indicateur de chargement
         $('#loading').show();
         $('#print').prop('disabled', true);
-
         // Récupérer les informations de la facture
-        var date = $('#date').text();
-        var transaction_id = $('#transaction_id').text();
-        var total = $('#total').text();
-        var items = [];
-        var statuts = 'payé';
+        var date = $('#date').text(); var transaction_id = $('#transaction_id').text();
+        var total = $('#total').text(); var items = []; var statuts = 'payé';
 
         $('#recu tr').each(function() {
             var item = {
-                id: $(this).find('td:eq(0)').text(),
-                qty: $(this).find('td:eq(1)').text(),
-                pu: $(this).find('td:eq(2)').text(),
-                total: $(this).find('td:eq(3)').text()
+                id: $(this).find('td:eq(0)').text(), qty: $(this).find('td:eq(1)').text(),
+                pu: $(this).find('td:eq(2)').text(), total: $(this).find('td:eq(3)').text()
             };
             items.push(item);
         });
-
         // Vérifier s'il y a des articles ou un total à 0
         if ($.trim(total) === '' && items.length === 0) {
             alert('Aucune vente en cours');
             $('#loading').hide(); // Cacher l'indicateur si aucune vente
             $('#print').prop('disabled', false); // Réactiver le bouton
             return; // Arrêter l'exécution si aucune vente
-        } else {
-            // Envoyer la requête AJAX pour enregistrer la transaction
+        } else { // Envoyer la requête AJAX pour enregistrer la transaction
             $.ajax({
                 url: 'save_transaction.php',
                 method: 'POST',
                 data: {
-                    date: date,
-                    transaction_id: transaction_id,
-                    total: total,
-                    statuts: statuts,
+                    date: date, transaction_id: transaction_id,
+                    total: total, statuts: statuts,
                     items: JSON.stringify(items)
                 },
                 success: function(response) {
                     $("#msg_print").html(response).delay(700).slideDown(700);
                     $("#msg_print").delay(2000).slideUp(700);
-                
                     // Utiliser un timeout pour donner un peu de temps à la mise à jour du DOM avant d'imprimer
                     setTimeout(function() {
-                        print();
-                        lastId();
-                        clearTableBody();
+                        print(); lastId(); clearTableBody();
                     }, 100); // 100 millisecondes d'attente
                 },
                 error: function(xhr, status, error) {
                     console.error('Erreur AJAX:', error);
-                    alert('Erreur lors de l\'enregistrement de la facture.');
+                    alert('Erreur lors de l\'enregistrement du reçu.');
                 },
                 complete: function() {
                     // Cacher l'indicateur de chargement et réactiver le bouton après la requête
-                    $('#loading').hide();
-                    $('#print').prop('disabled', false);
+                    $('#loading').hide(); $('#print').prop('disabled', false);
                 }
             });
         }
     });
 });
-
-//Get Receipt Number
+//Afficher le numéro de reçu en cours
 function lastId() {
     $(document).ready(function() {
         $.ajax({
@@ -476,11 +416,9 @@ function lastId() {
     });
 }
 lastId();
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////// START TRANSACTION ///////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //Afficher Transactions
 function affTs(){
     $.ajax({
@@ -496,7 +434,7 @@ function affTs(){
     });
 }
 affTs();
-
+//Afficher Formulaire pour modifier une transactions
 function updateTs() {
     $(document).on("click", "#btn_up_t", function(e) {
         e.preventDefault();
@@ -522,45 +460,37 @@ function updateTs() {
     });
 }
 updateTs();
-
-//fonction de mise a jour categorie
+//fonction de mise a jour transaction
 function majTs() {
     $(document).on("click" , "#btn_maj_t", function(e) {
         e.preventDefault();
-
-        var id = $("#id").val();
-        var statuts = $("#statuts").val();
+        var id = $("#id").val(); var statuts = $("#statuts").val();
         var btn_maj_t = $("#btn_maj_t").val();
-
         $.ajax({
             url:"update_transaction.php",
             type:"post",
             data:{
-                id:id,
-                statuts:statuts,
+                id:id, statuts:statuts,
                 btn_maj_t:btn_maj_t
             },
             success:function(data){
                 $("#msg_maj_t").html(data).delay(700).slideDown(700);
+                affTs(); updateTransactionTotals();
                 $("#msg_maj_t").delay(700).slideUp(700);
-                affTs();
-                updateTransactionTotals(); 
             }
         });
     });
 }
 majTs();
-
+//fonction d'affichage du total des ventes
 function updateTransactionTotals() {
     $.ajax({
         url: 'get_totals.php',
         method: 'GET',
         dataType: 'json',
         success: function(data) {
-            $('#t_total').text(Number(data.total).toFixed(2));
-            $('#t_today').text(Number(data.today).toFixed(2));
-            $('#t_week').text(Number(data.week).toFixed(2));
-            $('#t_month').text(Number(data.month).toFixed(2));
+            $('#t_total').text(Number(data.total).toFixed(2)); $('#t_today').text(Number(data.today).toFixed(2));
+            $('#t_week').text(Number(data.week).toFixed(2)); $('#t_month').text(Number(data.month).toFixed(2));
             $('#t_year').text(Number(data.year).toFixed(2));
         },
         error: function(xhr, status, error) {
@@ -569,7 +499,6 @@ function updateTransactionTotals() {
     });
 }
 updateTransactionTotals();
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////// END TRANSACTION ////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

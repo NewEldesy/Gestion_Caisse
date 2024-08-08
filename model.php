@@ -8,24 +8,20 @@ function dbConnect() {
         handleDatabaseError($e->getMessage());
     }
 }
-
 function handleDatabaseError($errorMessage) {
     exit("Erreur de base de données : " . $errorMessage);
 }
-
 function deleteRecord($table, $idColumn, $id) { // Fonctions pour supprimer un enregistrement d'une table spécifique
     $database = dbConnect();
     $stmt = $database->prepare("DELETE FROM {$table} WHERE {$idColumn} = :id");
     $stmt->bindParam(':id', $id, PDO::PARAM_INT); $stmt->execute();
 }
-
 function getById($table, $idColumn, $id) { // Fonctions pour obtenir un enregistrement par ID à partir d'une table spécifique
     $database = dbConnect();
     $stmt = $database->prepare("SELECT * FROM {$table} WHERE {$idColumn} = :id");
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute(); return $stmt->fetch(PDO::FETCH_ASSOC);
 }
-
 // Fonctions pour ajouter des enregistrements à différentes tables
 function addCat($data) {
     $database = dbConnect(); $query = ("INSERT INTO categories (nom) VALUES (:nom)");
@@ -37,7 +33,6 @@ function addProd($data) {
     $stmt = $database->prepare($query); $stmt->bindValue(":nom", $data['nom']); $stmt->bindValue(":prix", $data['prix']);
     $stmt->bindValue(":categorie_id", $data['categorie_id']); $stmt->bindValue(":img", $data['img']); $stmt->execute();
 }
-
 // Fonctions pour lire des enregistrements dans différentes tables
 function getCats() { 
     $database = dbConnect();
@@ -54,16 +49,13 @@ function getT() {
     $stmt = $database->query("SELECT * FROM transactions");
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-
 // D'autres fonctions spécifiques pour obtenir des enregistrements par ID pour différentes tables
 function getProduitById($id) { return getById('produits', 'id', $id); }
 function getCatById($id) { return getById('categories', 'id', $id); }
 function getTById($id) { return getById('transactions', 'id', $id); }
-
 // Fonctions pour supprimer des enregistrements de différentes tables
 function removeCat($id) { deleteRecord('categories', 'id', $id); }
 function removeProd($id) { deleteRecord('produits', 'id', $id); }
-
 // Fonctions pour mettre à jour des enregistrements dans différentes tables
 function updateCat($data) {
     $database = dbConnect(); $query = ("UPDATE categories SET nom = :nom WHERE id = :id");
@@ -81,14 +73,12 @@ function updateT($data) {
     $stmt = $database->prepare($query); $stmt->bindValue(":statuts", $data['statuts']);
     $stmt->bindValue(":id", $data['id'], PDO::PARAM_INT); $stmt->execute();
 }
-
 function getProdByCatId(){
     $database = dbConnect();
     $query = $database->prepare('SELECT * FROM produits WHERE categorie_id = :category_id');
     $query->bindParam(':category_id', $_POST['category_id'], PDO::PARAM_INT);
     $query->execute(); return $query->fetchAll(PDO::FETCH_ASSOC);
 }
-
 // Last Transaction Id
 function lastId() {
     $database = dbConnect();
@@ -96,7 +86,6 @@ function lastId() {
     $stmt= $database->prepare($querylastId); $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC); return $row['last_id'];
 }
-
 function getTotalTransactions($startDate, $endDate) {
     $database = dbConnect();
     $query = "SELECT SUM(total) AS total FROM transactions WHERE statuts = 'payé' AND date BETWEEN :startDate AND :endDate";
@@ -107,11 +96,9 @@ function getTotalTransactions($startDate, $endDate) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['total'] ? $result['total'] : 0;
 }
-
 function getTransactionTotals() {
     $today = date('Y-m-d'); $startOfWeek = date('Y-m-d', strtotime('monday this week'));
     $startOfMonth = date('Y-m-01'); $startOfYear = date('Y-01-01');
-
     $totals = [
         'today' => getTotalTransactions($today, $today), 'week' => getTotalTransactions($startOfWeek, $today),
         'month' => getTotalTransactions($startOfMonth, $today), 'year' => getTotalTransactions($startOfYear, $today),
