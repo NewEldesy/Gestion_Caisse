@@ -7,7 +7,7 @@
     if ($categoryId == 1) {
         $prods = getProducts();
     } else {
-        $prods = getProdByCatId();
+        $prods = getProdByCatId($categoryId);
     }
 
     $items = '';

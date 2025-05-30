@@ -29,7 +29,7 @@
                                     <div class="col border border border-secondary border rounded p-4">
                                         <div id="msg_print"></div>
                                         <div class="facture" id="facture">
-                                            <h1>Espace Regale</h1>
+                                            <h1>Espace Régal</h1>
                                             <p><span id="date"></span></p>
                                             <p>Reçu n° : <span id="transaction_id"></span></p>
                                             
@@ -38,7 +38,7 @@
                                                     <tr>
                                                         <th scope="col">#</th>
                                                         <th scope="col">Qty</th>
-                                                        <th scope="col">P.U</th>
+                                                        <th scope="col">Prix Unit.</th>
                                                         <th scope="col">Total</th>
                                                         <th scope="col" class="action-col">Action</th>
                                                     </tr>
