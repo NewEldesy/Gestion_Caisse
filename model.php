@@ -9,7 +9,35 @@ function dbConnect() {
     }
 }
 function handleDatabaseError($errorMessage) {
-    exit("Erreur de base de données : " . $errorMessage);
+    $logDir = 'logs';
+    if (!is_dir($logDir)) {
+        mkdir($logDir, 0755, true);
+    }
+    $logFile = $logDir . '/db_errors.log';
+    $timestamp = date("Y-m-d H:i:s");
+    $logMessage = "[" . $timestamp . "] " . $errorMessage . PHP_EOL;
+    file_put_contents($logFile, $logMessage, FILE_APPEND);
+
+    echo <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Database Error</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 40px; }
+        .error-container { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 20px; border-radius: 5px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>Erreur de Base de Données</h1>
+        <p>Une erreur s'est produite lors de l'accès à la base de données. Veuillez réessayer plus tard ou contacter l'administrateur si le problème persiste.</p>
+    </div>
+</body>
+</html>
+HTML;
+    exit;
 }
 function deleteRecord($table, $idColumn, $id) { // Fonctions pour supprimer un enregistrement d'une table spécifique
     $database = dbConnect();
@@ -29,7 +57,7 @@ function addCat($data) {
     $stmt->execute();
 }
 function addProd($data) {
-    $database = dbConnect(); $query = ("INSERT INTO produits (nom, prix, id, img) VALUES (:nom, :prix, :categorie_id, :img)");
+    $database = dbConnect(); $query = ("INSERT INTO produits (nom, prix, categorie_id, img) VALUES (:nom, :prix, :categorie_id, :img)");
     $stmt = $database->prepare($query); $stmt->bindValue(":nom", $data['nom']); $stmt->bindValue(":prix", $data['prix']);
     $stmt->bindValue(":categorie_id", $data['categorie_id']); $stmt->bindValue(":img", $data['img']); $stmt->execute();
 }
@@ -73,10 +101,10 @@ function updateT($data) {
     $stmt = $database->prepare($query); $stmt->bindValue(":statuts", $data['statuts']);
     $stmt->bindValue(":id", $data['id'], PDO::PARAM_INT); $stmt->execute();
 }
-function getProdByCatId(){
+function getProdByCatId($categoryId){
     $database = dbConnect();
     $query = $database->prepare('SELECT * FROM produits WHERE categorie_id = :category_id');
-    $query->bindParam(':category_id', $_POST['category_id'], PDO::PARAM_INT);
+    $query->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
     $query->execute(); return $query->fetchAll(PDO::FETCH_ASSOC);
 }
 // Last Transaction Id
@@ -105,4 +133,25 @@ function getTransactionTotals() {
         'total' => getTotalTransactions('1970-01-01', $today), // Start date from the epoch
     ];
     return $totals;
+}
+
+function getUserByUsername($username) {
+    $database = dbConnect();
+    if (!$database) {
+        // dbConnect will call handleDatabaseError and exit, but good practice to check
+        return false; 
+    }
+    try {
+        $stmt = $database->prepare("SELECT * FROM users WHERE username = :username");
+        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC); // Returns user array or false if not found
+    } catch (PDOException $e) {
+        // Log error, but don't expose details to user-facing login process
+        error_log("Database error in getUserByUsername: " . $e->getMessage());
+        // It's crucial that handleDatabaseError in dbConnect logs details and shows a generic page.
+        // For login, we just want to indicate failure, not necessarily halt everything with a generic DB error page
+        // if the table or specific query fails for some reason other than connection.
+        return false; 
+    }
 }
